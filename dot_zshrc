@@ -63,6 +63,16 @@ alias po='$aurhelper -Qtdq | $aurhelper -Rns -' # remove unused packages, also t
 alias pol='$aurhelper -Qqd | $aurhelper -Rsa --print -'
 alias vc='code' # gui code editor
 
+# Aliases for generating preferred Arch mirrorlist
+alias ua-drop-caches='sudo paccache -rk3; yay -Sc --aur --noconfirm'
+alias ua-update-all='export TMPFILE="$(mktemp)"; \
+    sudo true; \
+    rate-mirrors --save=$TMPFILE arch --max-delay=21600 \
+      && sudo mv /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist-backup \
+      && sudo mv $TMPFILE /etc/pacman.d/mirrorlist \
+      && ua-drop-caches \
+      && yay -Syyu --noconfirm'
+
 # Change dir aliases
 alias ..='cd ..'
 alias ...='cd ../..'
