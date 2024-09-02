@@ -14,9 +14,13 @@ bindkey -e
 # The following lines were added by compinstall
 zstyle :compinstall filename '/home/alex/.zshrc'
 
+# Enable zsh tab autocompletion
 autoload -Uz compinit
 compinit
 # End of lines added by compinstall
+
+# Ensure only unique entries in PATH
+typeset -U path PATH
 
 # Path to your oh-my-zsh installation.
 ZSH=/usr/share/oh-my-zsh/
@@ -91,8 +95,7 @@ alias .3='cd ../../..'
 alias .4='cd ../../../..'
 alias .5='cd ../../../../..'
 
-
-# aws cli
+# aws cli command completion
 source /usr/bin/aws_zsh_completer.sh
 
 # The next line updates PATH for the Google Cloud SDK.
@@ -210,9 +213,3 @@ rfv() (
       --preview-window '~4,+{2}+4/3,<80(up)' \
       --query "$*"
 )
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/home/alex/google-cloud-sdk/path.zsh.inc' ]; then . '/home/alex/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/home/alex/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/alex/google-cloud-sdk/completion.zsh.inc'; fi
