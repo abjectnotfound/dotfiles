@@ -61,7 +61,6 @@ brew "uv"
 # cloud/infra
 brew "ansible"
 brew "ansible-lint"
-brew "ariga/tap/atlas"
 brew "awscli"
 brew "cloud-sql-proxy"
 brew "doctl"
