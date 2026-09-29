@@ -1,0 +1,27 @@
+[metadata]
+name = "pip3-packages"
+description = "List installed Python3 packages"
+requirements = ["pip3"]
+
+[source]
+command = "pip3 list --format=freeze 2>/dev/null | cut -d= -f1"
+
+[preview]
+command = "pip3 show '{}'"
+
+[ui]
+layout = "portrait"
+
+[keybindings]
+ctrl-u = "actions:upgrade"
+ctrl-d = "actions:uninstall"
+
+[actions.upgrade]
+description = "Upgrade the selected package"
+command = "pip3 install --upgrade '{}'"
+mode = "execute"
+
+[actions.uninstall]
+description = "Uninstall the selected package"
+command = "pip3 uninstall '{}'"
+mode = "execute"
