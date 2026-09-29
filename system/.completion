@@ -22,16 +22,6 @@ _dotfiles_completions() {
 
 complete -o default -F _dotfiles_completions dot
 
-# tmux
-
-if is-executable tmux; then
-  if [ -f "/usr/share/bash-completion/completions/tmux" ]; then
-    . "/usr/share/bash-completion/completions/tmux"
-  elif [ -n "$HOMEBREW_PREFIX" ] && [ -f "$HOMEBREW_PREFIX/etc/bash_completion.d/tmux" ]; then
-    . "$HOMEBREW_PREFIX/etc/bash_completion.d/tmux"
-  fi
-fi
-
 # npm (https://docs.npmjs.com/cli/completion)
 
 if is-executable npm; then
