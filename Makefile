@@ -14,7 +14,7 @@ export ACCEPT_EULA=Y
 
 all: $(OS)
 
-macos: sudo core-macos packages-macos link duti bun
+macos: sudo core-macos packages-macos link duti bun firefox-config
 
 ubuntu: core-ubuntu link
 
@@ -109,6 +109,9 @@ duti:
 
 bun:
   curl -fsSL https://bun.sh/install | bash
+
+firefox-config:
+	$(DOTFILES_DIR)/bin/install-firefox-config
 
 test:
 	bats test

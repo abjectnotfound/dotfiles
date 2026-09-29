@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# Install dotfiles Betterfox user.js into every Firefox profile.
+
+set -euo pipefail
+
+PROFILES_DIR="${HOME}/Library/Application Support/Firefox/Profiles"
+SOURCE="${DOTFILES_DIR:-$(cd "$(dirname "$0")/.." && pwd)}/config/firefox/user.js"
+
+if [[ ! -f "$SOURCE" ]]; then
+  echo "error: $SOURCE not found" >&2
+  exit 1
+fi
+
+if [[ ! -d "$PROFILES_DIR" ]]; then
+  echo "error: $PROFILES_DIR not found" >&2
+  exit 1
+fi
+
+installed=0
+for PROFILE in "$PROFILES_DIR"/*/; do
+  [[ -d "$PROFILE" ]] || continue
+  [[ -f "$PROFILE/prefs.js" ]] || continue
+
+  DEST="${PROFILE%/}/user.js"
+  if [[ -f "$DEST" ]]; then
+    cp "$DEST" "$DEST.bak"
+    echo "backed up: $DEST -> $DEST.bak"
+  fi
+  cp "$SOURCE" "$DEST"
+  echo "installed: $SOURCE -> $DEST"
+  installed=$((installed + 1))
+done
+
+echo "Done. Installed into $installed profile(s)."
