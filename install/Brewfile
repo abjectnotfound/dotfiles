@@ -58,12 +58,6 @@ brew "sqlc"
 brew "sqlfluff"
 brew "uv"
 
-# taps (must be declared before formulas from these taps)
-tap "ariga/tap"
-tap "floatpane/matcha"
-tap "hashicorp/tap"
-tap "teamookla/speedtest"
-
 # cloud/infra
 brew "ansible"
 brew "ansible-lint"

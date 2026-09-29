@@ -93,7 +93,7 @@ brew-packages: brew taps
 	brew bundle --verbose --file=$(DOTFILES_DIR)/install/Brewfile || true
 
 taps: brew
-	@for tap in $$(grep '^tap ' $(DOTFILES_DIR)/install/Brewfile | awk '{print $$2}' | tr -d '"'); do \
+	@for tap in ariga/tap floatpane/matcha hashicorp/tap teamookla/speedtest; do \
 		HOMEBREW_NO_AUTO_UPDATE=1 brew tap --force $$tap 2>&1 || true; \
 	done
 
