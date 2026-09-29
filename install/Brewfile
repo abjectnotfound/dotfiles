@@ -87,6 +87,7 @@ brew "mermaid-cli"
 brew "mpv"
 brew "nmap"
 brew "ollama"
+brew "podman-compose"
 brew "posting"
 brew "rclone"
 brew "socat"
@@ -114,3 +115,6 @@ brew "luarocks"
 # media
 brew "ffmpeg"
 brew "imagemagick"
+
+# misc
+brew "mole"
