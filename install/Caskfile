@@ -34,7 +34,6 @@ cask "virtualbox"
 
 # Browsers/fonts/media
 cask "firefox"
-cask "font-hack"
 cask "font-hack-nerd-font"
 cask "gimp"
 cask "google-chrome"

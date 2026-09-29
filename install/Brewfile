@@ -41,10 +41,8 @@ brew "ripgrep"
 brew "cmake"
 brew "gh"
 brew "make"
-brew "n"
 brew "python"
 brew "ruby"
-brew "rust"
 brew "shellcheck"
 
 # dev tools
@@ -60,7 +58,6 @@ brew "pre-commit"
 brew "rustup"
 brew "sqlc"
 brew "sqlfluff"
-brew "typescript"
 brew "uv"
 
 # cloud/infra
@@ -81,12 +78,10 @@ brew "s3cmd"
 brew "skaffold"
 
 # cli utils
-brew "ack"
 brew "btop"
 brew "chafa"
 brew "exiftool"
 brew "herdr"
-brew "hunk"
 brew "lazydocker"
 brew "lazygit"
 brew "markdown-toc"
