@@ -1,5 +1,6 @@
 cask "1password"
 cask "firefox"
+cask "spotify"
 cask "font-fira-code"
 cask "font-hack"
 cask "fork"

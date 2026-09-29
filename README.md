@@ -12,7 +12,7 @@ Mainly targets macOS systems, but works on Ubuntu and Arch Linux as well.
 - Updated macOS defaults
 - Well-organized and easy to customize
 - The installation and runcom setup is
-  [tested weekly on real Ubuntu and macOS machines](https://github.com/webpro/dotfiles/actions)
+  [tested weekly on real Ubuntu and macOS machines](https://github.com/abjectnotfound/dotfiles/actions)
   (Sonoma/14, Sequoia/15, Tahoe/26) using [a GitHub Action](./.github/workflows/dotfiles-installation.yml)
 - Supports both Apple Silicon (M1) and Intel chips
 
@@ -22,7 +22,11 @@ Mainly targets macOS systems, but works on Ubuntu and Arch Linux as well.
 - [homebrew-cask](https://github.com/Homebrew/homebrew-cask) (packages: [Caskfile](./install/Caskfile))
 - [Node.js + npm LTS](https://nodejs.org/en/download/) (packages: [npmfile](./install/npmfile))
 - Latest Git, Bash, Python, GNU coreutils, curl, Ruby
-- Editors: VS Code and nano (`EDITOR`, `VISUAL` and Git `core.editor`)
+- Editors: VS Code (macOS) / nano (Linux), Fork as Git GUI (`EDITOR`, `VISUAL`, `VISUAL_GIT` and Git `core.editor`)
+- [bun](https://bun.sh) runtime (installed via `make`, added to `PATH`)
+- [delta](https://github.com/dandavison/delta) as the Git diff pager
+- [topgrade](https://github.com/topgrade-rs/topgrade) for package updates (system and skills steps disabled)
+- GitHub CLI (`gh`) as the Git credential helper and for [authenticated git operations](https://cli.github.com/manual/gh_auth_setup_git)
 
 ## Installation
 
@@ -38,7 +42,7 @@ The Xcode Command Line Tools includes `git` and `make` (not available on stock m
 1. Install this repo with `curl` available:
 
 ```bash
-bash -c "`curl -fsSL https://raw.githubusercontent.com/webpro/dotfiles/master/remote-install.sh`"
+bash -c "`curl -fsSL https://raw.githubusercontent.com/abjectnotfound/dotfiles/main/remote-install.sh`"
 ```
 
 This will clone or download this repo to `~/.dotfiles` (depending on the availability of `git`, `curl` or `wget`).
@@ -46,7 +50,7 @@ This will clone or download this repo to `~/.dotfiles` (depending on the availab
 1. Alternatively, clone manually into the desired location:
 
 ```bash
-git clone https://github.com/webpro/dotfiles.git ~/.dotfiles
+git clone https://github.com/abjectnotfound/dotfiles.git ~/.dotfiles
 ```
 
 2. Use the [Makefile](./Makefile) to install the [packages listed above](#packages-overview), and symlink
@@ -58,7 +62,7 @@ make
 ```
 
 Running `make` with the Makefile is idempotent. The installation process in the Makefile is tested on every push and every week in this
-[GitHub Action](https://github.com/webpro/dotfiles/actions). Please file an issue in this repo if there are errors.
+[GitHub Action](https://github.com/abjectnotfound/dotfiles/actions). Please file an issue in this repo if there are errors.
 
 ## Post-Installation
 
@@ -111,7 +115,7 @@ Commands:
 
 ## Customize
 
-To customize the dotfiles to your likings, fork it and [be the king of your castle!](https://www.webpro.nl/articles/getting-started-with-dotfiles)
+To customize the dotfiles to your likings, fork this repo and [be the king of your castle!](https://www.webpro.nl/articles/getting-started-with-dotfiles) — the original article explains how to get started with a fork of your own.
 
 ## Credits
 

@@ -10,7 +10,6 @@ pnpm
 prettier
 release-it
 remark-cli
-remark-preset-webpro
 svgo
 tldr
 tsx
