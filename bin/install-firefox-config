@@ -12,8 +12,8 @@ if [[ ! -f "$SOURCE" ]]; then
 fi
 
 if [[ ! -d "$PROFILES_DIR" ]]; then
-  echo "error: $PROFILES_DIR not found" >&2
-  exit 1
+  echo "skipping: Firefox not installed (no Profiles directory)" >&2
+  exit 0
 fi
 
 installed=0
