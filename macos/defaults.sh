@@ -1,4 +1,4 @@
-COMPUTER_NAME="eiger"
+COMPUTER_NAME="${COMPUTER_NAME:-$(scutil --get ComputerName 2>/dev/null || hostname -s)}"
 LANGUAGES=(en)
 LOCALE="en_US"
 MEASUREMENT_UNITS="Inches"
