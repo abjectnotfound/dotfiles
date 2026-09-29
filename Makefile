@@ -48,6 +48,11 @@ link: stow-$(OS)
 	for FILE in $$(\ls -A runcom); do if [ -f $(HOME)/$$FILE -a ! -h $(HOME)/$$FILE ]; then \
 		mv -v $(HOME)/$$FILE{,.bak}; fi; done
 	mkdir -p "$(XDG_CONFIG_HOME)"
+	@for dir in $$(\ls -A config); do \
+		if [ -e "$(XDG_CONFIG_HOME)/$$dir" ] && [ ! -L "$(XDG_CONFIG_HOME)/$$dir" ]; then \
+			mv -v "$(XDG_CONFIG_HOME)/$$dir" "$(XDG_CONFIG_HOME)/$$dir.bak"; \
+		fi; \
+	done
 	stow -t "$(HOME)" runcom
 	stow -t "$(XDG_CONFIG_HOME)" config
 
