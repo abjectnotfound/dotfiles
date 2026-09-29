@@ -108,12 +108,11 @@ vscode-extensions: cask-apps
 	for EXT in $$(cat install/Codefile); do code --install-extension $$EXT; done
 
 node-packages: npm
-	npm install --force --location global $(shell cat install/npmfile)
+	npm install --force --location global --allow-scripts $(shell cat install/npmfile)
 
 rust-packages: brew-packages
 	rustup default stable 2>/dev/null || true
-	[ -f "$(HOME)/.cargo/env" ] && . "$(HOME)/.cargo/env"; \
-	cargo install $(shell cat install/Rustfile)
+	$(HOME)/.cargo/bin/cargo install $(shell cat install/Rustfile)
 
 duti:
 	duti -v $(DOTFILES_DIR)/install/duti
