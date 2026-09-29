@@ -61,6 +61,7 @@ brew "uv"
 # taps (must be declared before formulas from these taps)
 tap "ariga/tap"
 tap "hashicorp/tap"
+tap "teamookla/speedtest"
 
 # cloud/infra
 brew "ansible"
@@ -95,7 +96,7 @@ brew "podman-compose"
 brew "posting"
 brew "rclone"
 brew "socat"
-brew "speedtest"
+brew "teamookla/speedtest/speedtest"
 brew "starship"
 brew "television"
 brew "telnet"
