@@ -111,8 +111,7 @@ node-packages: npm
 	npm install --force --location global --allow-scripts $(shell cat install/npmfile)
 
 rust-packages: brew-packages
-	rustup toolchain install stable
-	rustup default stable
+	rustup-init -y --default-toolchain stable 2>/dev/null || true
 	export PATH="$$HOME/.cargo/bin:$$PATH" && cargo install $(shell cat install/Rustfile)
 
 duti:
