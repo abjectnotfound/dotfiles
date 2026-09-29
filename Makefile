@@ -113,7 +113,7 @@ node-packages: npm
 rust-packages: brew-packages
 	rustup toolchain install stable
 	rustup default stable
-	rustup run stable cargo install $(shell cat install/Rustfile)
+	cargo install $(shell cat install/Rustfile)
 
 duti:
 	duti -v $(DOTFILES_DIR)/install/duti
