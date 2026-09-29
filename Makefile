@@ -111,8 +111,7 @@ node-packages: npm
 	npm install --force --location global --allow-scripts $(shell cat install/npmfile)
 
 rust-packages: brew-packages
-	$(HOMEBREW_PREFIX)/opt/rustup/bin/rustup-init -y --default-toolchain stable
-	export PATH="$$HOME/.cargo/bin:$$PATH" && cargo install $(shell cat install/Rustfile)
+	export PATH="$(HOMEBREW_PREFIX)/opt/rustup/bin:$$HOME/.cargo/bin:$$PATH" && cargo install $(shell cat install/Rustfile)
 
 duti:
 	duti -v $(DOTFILES_DIR)/install/duti
