@@ -2,6 +2,7 @@
 cask "claude-code@latest"
 cask "devutils"
 cask "docker-desktop"
+cask "gcloud-cli"
 cask "ghostty"
 cask "podman-desktop"
 cask "visual-studio-code"
