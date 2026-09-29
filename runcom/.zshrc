@@ -97,6 +97,8 @@ export HOMEBREW_AUTOREMOVE=1
 
 # Prompt and shell integrations
 
+[ -f "$HOME/.atuin/bin/env" ] && . "$HOME/.atuin/bin/env"
+
 command -v starship >/dev/null && eval "$(starship init zsh)"
 command -v atuin >/dev/null && eval "$(atuin init zsh)"
 command -v zoxide >/dev/null && eval "$(zoxide init zsh)"
