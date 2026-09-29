@@ -12,6 +12,7 @@ sub_help () {
   echo "   dock             Apply macOS Dock settings"
   echo "   duti             Set default apps for file types (UTI)"
   echo "   edit             Open dotfiles in IDE ($VISUAL) and Git GUI ($VISUAL_GIT)"
+  echo "   firefox-config   Install Betterfox user.js into Firefox profiles"
   echo "   help             This help message"
   echo "   macos            Apply macOS system defaults"
   echo "   test             Run tests"
@@ -45,6 +46,10 @@ sub_update () {
 
 sub_duti () {
   duti -v "${DOTFILES_DIR}/install/duti"
+}
+
+sub_firefox-config () {
+  "${DOTFILES_DIR}/bin/install-firefox-config"
 }
 
 sub_macos () {

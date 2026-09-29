@@ -1,5 +1,4 @@
 @antfu/ni
-fast-cli
 fkill-cli
 get-port-cli
 gtop
@@ -10,7 +9,6 @@ pnpm
 prettier
 release-it
 remark-cli
-remark-preset-webpro
 svgo
 tldr
 tsx

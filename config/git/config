@@ -1,20 +1,23 @@
 [user]
 	name = Alex Ciavarra
-	email = abjectnotfound@protonmail.com
-	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIO4OYimzLgAWrgs3fYQ5BIdbfY37KlAzesRjk6pBAWU3
+	email = abjectnotfound@proton.me
+	signingkey = ~/.ssh/id_ed25519.pub
 
 [github]
 	user = abjectnotfound
 
 [core]
 	excludesfile = ~/.config/git/ignore
-	editor = git-editor
+	editor = nvim
 	filemode = false
 	trustctime = false
 	autocrlf = input
 	untrackedCache = true
 	pager = delta
 	ignorecase = false
+
+[interactive]
+	diffFilter = delta --color-only
 
 [credential]
 	helper = osxkeychain
@@ -33,6 +36,7 @@
 
 [push]
 	default = simple
+	autoSetupRemote = true
 
 [fetch]
 	prune = true
@@ -91,7 +95,7 @@
 	path =
 
 [merge]
-	conflictstyle = diff3
+	conflictstyle = zdiff3
 	defaultToUpstream = true
 	tool = vscode
 
@@ -121,10 +125,12 @@
 [gpg]
 	format = ssh
 [gpg "ssh"]
-	program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
 	allowedSignersFile = ~/.config/git/allowed_signers
 [commit]
 	gpgsign = true
 [credential "https://github.com"]
 	helper =
 	helper = !/opt/homebrew/bin/gh auth git-credential
+
+[url "ssh://git@github.com/"]
+	insteadOf = https://github.com/
