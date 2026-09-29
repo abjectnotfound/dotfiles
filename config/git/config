@@ -1,6 +1,6 @@
 [user]
 	name = Alex Ciavarra
-	email = abjectnotfound@protonmail.com
+	email = abjectnotfound@proton.me
 	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIO4OYimzLgAWrgs3fYQ5BIdbfY37KlAzesRjk6pBAWU3
 
 [github]
@@ -15,6 +15,9 @@
 	untrackedCache = true
 	pager = delta
 	ignorecase = false
+
+[interactive]
+	diffFilter = delta --color-only
 
 [credential]
 	helper = osxkeychain
@@ -33,6 +36,7 @@
 
 [push]
 	default = simple
+	autoSetupRemote = true
 
 [fetch]
 	prune = true
@@ -121,10 +125,12 @@
 [gpg]
 	format = ssh
 [gpg "ssh"]
-	program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
 	allowedSignersFile = ~/.config/git/allowed_signers
 [commit]
 	gpgsign = true
 [credential "https://github.com"]
 	helper =
 	helper = !/opt/homebrew/bin/gh auth git-credential
+
+[url "ssh://git@github.com/"]
+	insteadOf = https://github.com/
