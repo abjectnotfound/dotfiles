@@ -7,8 +7,8 @@ Mainly targets macOS systems, but works on Ubuntu and Arch Linux as well.
 ## Highlights
 
 - Minimal efforts to install everything, using a [Makefile](./Makefile)
-- Mostly based around Homebrew, Caskroom and Node.js, latest Bash + GNU Utils
-- Fast and colored prompt
+- Mostly based around Homebrew, Caskroom and Node.js, latest Bash + GNU Utils, with Zsh and the Starship prompt
+- Starship prompt with Zsh and Bash support
 - Updated macOS defaults
 - Well-organized and easy to customize
 - The installation and runcom setup is
@@ -22,7 +22,10 @@ Mainly targets macOS systems, but works on Ubuntu and Arch Linux as well.
 - [homebrew-cask](https://github.com/Homebrew/homebrew-cask) (packages: [Caskfile](./install/Caskfile))
 - [Node.js + npm LTS](https://nodejs.org/en/download/) (packages: [npmfile](./install/npmfile))
 - Latest Git, Bash, Python, GNU coreutils, curl, Ruby
-- Editors: VS Code (macOS) / nano (Linux), Fork as Git GUI (`EDITOR`, `VISUAL`, `VISUAL_GIT` and Git `core.editor`)
+- Editors: VS Code (macOS) / nano (Linux), using `$EDITOR`, `$VISUAL`, `$VISUAL_GIT` and Git `core.editor`
+- [Starship](https://starship.rs) prompt, with Zsh (`zsh-autosuggestions`, `zsh-syntax-highlighting`, `zsh-completions`) and Bash support
+- Terminals: [Ghostty](https://ghostty.org) and [WezTerm](https://wezfurlong.org/wezterm/)
+- [Firefox Betterfox](https://github.com/yokoffing/Betterfox) config (auto-installed via `make firefox-config`)
 - [bun](https://bun.sh) runtime (installed via `make`, added to `PATH`)
 - [delta](https://github.com/dandavison/delta) as the Git diff pager
 - [topgrade](https://github.com/topgrade-rs/topgrade) for package updates (system and skills steps disabled)
@@ -74,7 +77,7 @@ git config --global user.email "your@email.com"
 git config --global github.user "your-github-username"
 ```
 
-2. Sign in to 1Password and [configure commit signing](https://www.1password.dev/ssh/git-commit-signing) with your existing SSH key.
+2. Configure SSH commit signing with your existing SSH key. The git config is pre-configured for SSH signing via `gpg.format = ssh`.
 
 3. Authenticate [GitHub CLI](https://cli.github.com/manual/gh_auth_login):
 
@@ -82,14 +85,22 @@ git config --global github.user "your-github-username"
 gh auth login
 ```
 
-4. Set macOS [Dock items](./macos/dock.sh) and [system defaults](./macos/defaults.sh):
+4. Configure the [Starship](https://starship.rs) prompt (optional): run `starship preset` to customize.
+
+5. Set macOS [Dock items](./macos/dock.sh) and [system defaults](./macos/defaults.sh):
 
 ```sh
 dot dock
 dot macos
 ```
 
-5. Populate this file with anything you need sourced in each shell:
+6. Install the Firefox config:
+
+```sh
+dot firefox-config
+```
+
+7. Populate this file with anything you need sourced in each shell:
 
 ```sh
 mkdir -p $DOTFILES_DIR/local
@@ -106,12 +117,25 @@ Usage: dot <command>
 Commands:
    clean            Clean up caches (brew, cargo, gem, pip)
    dock             Apply macOS Dock settings
+   duti             Set default apps for file types (UTI)
    edit             Open dotfiles in IDE ($VISUAL) and Git GUI ($VISUAL_GIT)
+   firefox-config   Install Betterfox user.js into Firefox profiles
    help             This help message
    macos            Apply macOS system defaults
    test             Run tests
    update           Update packages and pkg managers (brew, casks, cargo, pip3, npm, gems, macOS)
 ```
+
+## What's tracked
+
+- Shell: Bash (`.bash_profile`) and Zsh (`.zshrc`) configs, sourcing shared `system/*` files
+- Prompt: Starship (cross-shell)
+- Git: Full config with SSH signing, delta pager, VS Code diff/merge tools
+- Terminals: Ghostty, WezTerm, Kitty configs
+- Editor: Neovim (LazyVim), VS Code
+- Tools: Television (67 cable channels), OpenCode, Trippy, btop, htop, mise
+- Firefox: Betterfox `user.js` with auto-install script
+- macOS: System defaults, Dock, file associations (duti)
 
 ## Customize
 
