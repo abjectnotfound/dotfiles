@@ -89,8 +89,13 @@ packages-arch: pacman-packages
 pacman-packages:
 	pacman -S --noconfirm - < $(DOTFILES_DIR)/install/pacmanfile
 
-brew-packages: brew
+brew-packages: brew taps
 	brew bundle --verbose --file=$(DOTFILES_DIR)/install/Brewfile || true
+
+taps: brew
+	@for tap in $$(grep '^tap ' $(DOTFILES_DIR)/install/Brewfile | awk '{print $$2}' | tr -d '"'); do \
+		brew tap $$tap 2>/dev/null || true; \
+	done
 
 cask-apps: brew
 	brew bundle --file=$(DOTFILES_DIR)/install/Caskfile || true
