@@ -94,7 +94,7 @@ brew-packages: brew taps
 
 taps: brew
 	@for tap in $$(grep '^tap ' $(DOTFILES_DIR)/install/Brewfile | awk '{print $$2}' | tr -d '"'); do \
-		brew tap --force $$tap || true; \
+		HOMEBREW_NO_AUTO_UPDATE=1 brew tap --force $$tap 2>&1 || true; \
 	done
 
 cask-apps: brew
