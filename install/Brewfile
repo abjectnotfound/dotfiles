@@ -60,6 +60,7 @@ brew "uv"
 
 # taps (must be declared before formulas from these taps)
 tap "ariga/tap"
+tap "floatpane/matcha"
 tap "hashicorp/tap"
 tap "teamookla/speedtest"
 
