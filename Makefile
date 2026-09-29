@@ -111,6 +111,7 @@ node-packages: npm
 	npm install --force --location global $(shell cat install/npmfile)
 
 rust-packages: brew-packages
+	[ -f "$(HOME)/.cargo/env" ] && . "$(HOME)/.cargo/env"; \
 	cargo install $(shell cat install/Rustfile)
 
 duti:
