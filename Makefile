@@ -112,7 +112,8 @@ node-packages: npm
 
 rust-packages: brew-packages
 	rustup default stable 2>/dev/null || true
-	$(HOME)/.cargo/bin/cargo install $(shell cat install/Rustfile)
+	. "$(HOME)/.cargo/env" 2>/dev/null || true; \
+	cargo install $(shell cat install/Rustfile)
 
 duti:
 	duti -v $(DOTFILES_DIR)/install/duti
