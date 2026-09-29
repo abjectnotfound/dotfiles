@@ -94,7 +94,7 @@ brew-packages: brew taps
 
 taps: brew
 	@for tap in $$(grep '^tap ' $(DOTFILES_DIR)/install/Brewfile | awk '{print $$2}' | tr -d '"'); do \
-		brew tap $$tap 2>/dev/null || true; \
+		brew tap $$tap || true; \
 	done
 
 cask-apps: brew
