@@ -94,7 +94,7 @@ brew-packages: brew taps
 
 taps: brew
 	@for tap in floatpane/matcha hashicorp/tap teamookla/speedtest; do \
-		HOMEBREW_NO_INSTALL_FROM_API=1 HOMEBREW_NO_AUTO_UPDATE=1 brew tap --force $$tap 2>&1 || true; \
+		brew tap $$tap 2>&1 || true; \
 	done
 
 cask-apps: brew
