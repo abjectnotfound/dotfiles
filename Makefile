@@ -14,7 +14,7 @@ export ACCEPT_EULA=Y
 
 all: $(OS)
 
-macos: sudo core-macos packages-macos link duti bun firefox-config
+macos: sudo core-macos packages-macos link duti bun firefox-config dock
 
 ubuntu: core-ubuntu link
 
@@ -112,6 +112,9 @@ bun:
 
 firefox-config:
 	$(DOTFILES_DIR)/bin/install-firefox-config
+
+dock:
+	$(DOTFILES_DIR)/bin/dot dock
 
 test:
 	bats test
