@@ -22,7 +22,7 @@ Mainly targets macOS systems, but works on Ubuntu and Arch Linux as well.
 - [homebrew-cask](https://github.com/Homebrew/homebrew-cask) (packages: [Caskfile](./install/Caskfile))
 - [Node.js + npm LTS](https://nodejs.org/en/download/) (packages: [npmfile](./install/npmfile))
 - Latest Git, Bash, Python, GNU coreutils, curl, Ruby
-- Editors: VS Code (macOS) / nano (Linux), using `$EDITOR`, `$VISUAL`, `$VISUAL_GIT` and Git `core.editor`
+- Editors: VS Code (macOS) / nvim (Linux), using `$EDITOR`, `$VISUAL`, `$VISUAL_GIT` and Git `core.editor`
 - [Starship](https://starship.rs) prompt, with Zsh (`zsh-autosuggestions`, `zsh-syntax-highlighting`, `zsh-completions`) and Bash support
 - Terminals: [Ghostty](https://ghostty.org) and [WezTerm](https://wezfurlong.org/wezterm/)
 - [Firefox Betterfox](https://github.com/yokoffing/Betterfox) config (auto-installed via `make firefox-config`)

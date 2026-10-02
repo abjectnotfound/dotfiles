@@ -215,7 +215,7 @@ fallback_channel = "files"
   "head",
   "tail",
   "vim",
-  "nano",
+  "nvim",
   "bat",
   "cp",
   "mv",
