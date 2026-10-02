@@ -56,6 +56,7 @@ com.microsoft.VSCode .tsv editor
 com.microsoft.VSCode .tsx editor
 com.microsoft.VSCode .txt editor
 com.microsoft.VSCode .vue editor
+com.microsoft.VSCode .xml editor
 com.microsoft.VSCode .yaml editor
 com.microsoft.VSCode .yml editor
 com.microsoft.VSCode .zoxide editor
