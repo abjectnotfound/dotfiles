@@ -111,7 +111,7 @@ node-packages: npm
 	npm install --force --location global --allow-scripts $(shell cat install/npmfile)
 
 rust-packages: brew-packages
-	curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain stable
+	curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain stable --no-modify-path
 	$(HOME)/.cargo/bin/cargo install $(shell cat install/Rustfile)
 
 duti:
