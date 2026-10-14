@@ -2,9 +2,16 @@
 
 [misc]
 assume_yes = true
-disable = ["containers", "git_repos", "pnpm", "yarn", "node", "system", "skills"]
-display_time = false
+disable = ["system", "pnpm", "yarn", "node"]
 cleanup = true
 
 [commands]
 "npm" = "npm update --location global --force"
+
+[containers]
+runtime = "podman"
+system_prune = true
+
+[git]
+repos = ["~/src/*/"]
+fallback_to_fetch_default = true
