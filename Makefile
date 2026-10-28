@@ -13,7 +13,7 @@ export ACCEPT_EULA=Y
 
 all: $(OS)
 
-macos: sudo core-macos packages-macos link mise-tools duti firefox-config dock
+macos: sudo core-macos packages-macos link mise-tools herdr-integrations duti firefox-config dock
 
 ubuntu: core-ubuntu link
 
@@ -100,6 +100,11 @@ vscode-extensions: cask-apps
 # runs after link so ~/.config/mise/config.toml is in place
 mise-tools: brew-packages link
 	mise install
+
+# herdr writes its hook scripts and registers them in the agents' settings
+herdr-integrations: brew-packages link
+	herdr integration install claude
+	herdr integration install opencode
 
 duti:
 	duti -v $(DOTFILES_DIR)/install/duti
