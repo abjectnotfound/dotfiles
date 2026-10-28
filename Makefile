@@ -66,19 +66,10 @@ brew:
 	is-executable brew || curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | bash
 
 bash: brew
-ifdef GITHUB_ACTION
-	if ! grep -q bash $(SHELLS); then \
-		brew install bash bash-completion@2 pcre && \
-		echo $(shell which bash) | sudo tee -a $(SHELLS) && \
-		sudo chsh -s $(shell which bash); \
+	if ! grep -qx $(BIN)/bash $(SHELLS); then \
+		brew install bash bash-completion@2 pcre2 && \
+		echo $(BIN)/bash | sudo tee -a $(SHELLS); \
 	fi
-else
-	if ! grep -q bash $(SHELLS); then \
-		brew install bash bash-completion@2 pcre && \
-		echo $(shell which bash) | sudo tee -a $(SHELLS) && \
-		chsh -s $(shell which bash); \
-	fi
-endif
 
 git: brew
 	brew install git git-extras
