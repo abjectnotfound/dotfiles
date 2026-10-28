@@ -1,0 +1,8 @@
+#!/bin/sh
+# Route a package manager through Socket Firewall (sfw).
+# Symlink this as <tool>; the shim dir is stripped from PATH so sfw runs the real <tool>.
+shim_dir=$(cd "$(dirname "$0")" && pwd)
+PATH=$(printf '%s' "$PATH" | tr ':' '\n' | grep -vxF "$shim_dir" | paste -sd: -)
+export PATH
+command -v sfw >/dev/null || { echo "sfw-shim: sfw not found on PATH" >&2; exit 127; }
+exec sfw "$(basename "$0")" "$@"

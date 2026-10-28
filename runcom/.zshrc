@@ -105,6 +105,9 @@ command -v zoxide >/dev/null && eval "$(zoxide init zsh)"
 command -v mise >/dev/null && eval "$(mise activate zsh)"
 command -v thefuck >/dev/null && eval $(thefuck --alias)
 
+# Route package managers through Socket Firewall; must come after mise activate (see sfw-shims/)
+export PATH="$DOTFILES_DIR/sfw-shims:$PATH"
+
 # Wrap up
 
 unset CURRENT_SCRIPT DOTFILE
