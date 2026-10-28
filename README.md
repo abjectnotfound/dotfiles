@@ -20,13 +20,12 @@ Mainly targets macOS systems, but works on Ubuntu and Arch Linux as well.
 
 - [Homebrew](https://brew.sh) (packages: [Brewfile](./install/Brewfile))
 - [homebrew-cask](https://github.com/Homebrew/homebrew-cask) (packages: [Caskfile](./install/Caskfile))
-- [Node.js + npm LTS](https://nodejs.org/en/download/) (packages: [npmfile](./install/npmfile))
-- Latest Git, Bash, Python, GNU coreutils, curl, Ruby
+- [mise](https://mise.jdx.dev) for language runtimes (Node, Python, Ruby, Go, Java, Rust, Bun) and global CLI tools (packages: [config.toml](./config/mise/config.toml))
+- Latest Git, Bash, GNU coreutils, curl
 - Editors: VS Code (macOS) / nvim (Linux), using `$EDITOR`, `$VISUAL`, `$VISUAL_GIT` and Git `core.editor`
 - [Starship](https://starship.rs) prompt, with Zsh (`zsh-autosuggestions`, `zsh-syntax-highlighting`, `zsh-completions`) and Bash support
 - Terminals: [Ghostty](https://ghostty.org) and [WezTerm](https://wezfurlong.org/wezterm/)
 - [Firefox Betterfox](https://github.com/yokoffing/Betterfox) config (auto-installed via `make firefox-config`)
-- [bun](https://bun.sh) runtime (installed via `make`, added to `PATH`)
 - [delta](https://github.com/dandavison/delta) as the Git diff pager
 - [topgrade](https://github.com/topgrade-rs/topgrade) for package updates (system and skills steps disabled)
 - GitHub CLI (`gh`) as the Git credential helper and for [authenticated git operations](https://cli.github.com/manual/gh_auth_setup_git)

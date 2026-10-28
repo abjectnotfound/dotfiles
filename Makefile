@@ -1,7 +1,7 @@
 DOTFILES_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 OS := $(shell bin/is-supported bin/is-macos macos $(shell bin/is-supported bin/is-ubuntu ubuntu $(shell bin/is-supported bin/is-arch arch linux)))
 HOMEBREW_PREFIX := $(shell bin/is-supported bin/is-arm64 /opt/homebrew /usr/local)
-PATH := $(HOMEBREW_PREFIX)/bin:$(DOTFILES_DIR)/bin:$(HOME)/.cargo/bin:$(PATH)
+PATH := $(HOMEBREW_PREFIX)/bin:$(DOTFILES_DIR)/bin:$(PATH)
 SHELL := env PATH=$(PATH) /bin/bash
 SHELLS := /private/etc/shells
 BIN := $(HOMEBREW_PREFIX)/bin
@@ -13,13 +13,13 @@ export ACCEPT_EULA=Y
 
 all: $(OS)
 
-macos: sudo core-macos packages-macos link duti bun firefox-config dock
+macos: sudo core-macos packages-macos link mise-tools duti firefox-config dock
 
 ubuntu: core-ubuntu link
 
 arch: core-arch packages-arch link
 
-core-macos: brew bash git npm
+core-macos: brew bash git
 
 core-ubuntu:
 	apt-get update
@@ -83,10 +83,7 @@ endif
 git: brew
 	brew install git git-extras
 
-npm: brew-packages
-	mise use -g node@lts
-
-packages-macos: brew-packages cask-apps node-packages rust-packages
+packages-macos: brew-packages cask-apps
 
 packages-arch: pacman-packages
 
@@ -107,18 +104,12 @@ cask-apps: brew
 vscode-extensions: cask-apps
 	for EXT in $$(cat install/Codefile); do code --install-extension $$EXT; done
 
-node-packages: npm
-	npm install --force --location global --allow-scripts $(shell cat install/npmfile)
-
-rust-packages: brew-packages
-	curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain stable --no-modify-path
-	$(HOME)/.cargo/bin/cargo install $(shell cat install/Rustfile)
+# runs after link so ~/.config/mise/config.toml is in place
+mise-tools: brew-packages link
+	mise install
 
 duti:
 	duti -v $(DOTFILES_DIR)/install/duti
-
-bun:
-  curl -fsSL https://bun.sh/install | bash
 
 firefox-config:
 	$(DOTFILES_DIR)/bin/install-firefox-config

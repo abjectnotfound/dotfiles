@@ -1,3 +1,49 @@
 [tools]
+# runtimes
+bun = "latest"
+go = "latest"
+java = "latest"
 node = "lts"
+python = "latest"
+ruby = "latest"
+rust = "stable"
+uv = "latest"
+
+# cli tools
+just = "latest"
+jless = "latest"
+
+# python tools (installed via uv)
+# ansible's CLIs live in its ansible-core dependency. ansible-core 2.21 supports controller python 3.12-3.14
+# and crashes on 3.15 (ansible/ansible#87677); drop the --python pin once ansible-core 2.22 is released
+"pypi:ansible" = { version = "latest", uvx_args = "--python 3.14 --with-executables-from ansible-core" }
+"pypi:ansible-lint" = { version = "latest", uvx_args = "--python 3.14" }
+"pypi:posting" = "latest"
+"pypi:pre-commit" = "latest"
+"pypi:s3cmd" = "latest"
+"pypi:sqlfluff" = "latest"
+
+# npm tools
+"npm:@antfu/ni" = "latest"
+# mise skips npm install scripts, so fetch puppeteer's headless Chrome ourselves
+"npm:@mermaid-js/mermaid-cli" = { version = "latest", postinstall = "node \"$MISE_TOOL_INSTALL_PATH/lib/node_modules/@mermaid-js/mermaid-cli/node_modules/puppeteer/install.mjs\"" }
+"npm:fkill-cli" = "latest"
+"npm:get-port-cli" = "latest"
+"npm:gtop" = "latest"
+"npm:local-web-server" = "latest"
+"npm:markdown-toc" = "latest"
+"npm:markdownlint-cli2" = "latest"
+"npm:npm-check-updates" = "latest"
+"npm:pnpm" = "latest"
+"npm:prettier" = "latest"
+"npm:release-it" = "latest"
+"npm:remark-cli" = "latest"
+"npm:sfw" = "latest"
+"npm:svgo" = "latest"
+"npm:tsx" = "latest"
+"npm:underscore-cli" = "latest"
+"npm:yarn" = "1"
 usage = "latest"
+
+[settings.npm]
+package_manager = "npm"
