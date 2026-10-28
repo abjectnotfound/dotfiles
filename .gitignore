@@ -8,3 +8,5 @@ config/opencode/plugins/herdr-agent-state.js
 config/opencode/herdr-tui-session.js
 config/opencode/herdr-opencode/
 
+# opencode server credentials
+config/opencode/service.json
