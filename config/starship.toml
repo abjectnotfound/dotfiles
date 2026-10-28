@@ -1,5 +1,5 @@
-[aws]
-disabled = true
+# [aws]
+# disabled = true
 
-[gcloud]
-disabled = true
+# [gcloud]
+# disabled = true
