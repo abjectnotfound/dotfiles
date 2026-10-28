@@ -26,7 +26,7 @@ cask "webex"
 cask "zoom"
 
 # System
-cask "logitune"
+cask "openlogi"
 cask "opensuperwhisper"
 cask "pangolin"
 cask "pgadmin4"
