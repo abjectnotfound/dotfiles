@@ -12,6 +12,7 @@ uv = "latest"
 # cli tools
 just = "latest"
 jless = "latest"
+trufflehog = "latest"
 
 # python tools (installed via uv)
 # ansible's CLIs live in its ansible-core dependency. ansible-core 2.21 supports controller python 3.12-3.14
