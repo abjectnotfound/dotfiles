@@ -69,7 +69,8 @@ alias ncuw="npm-check-updates --interactive --root --workspaces"
 
 # Network
 
-alias ipp="dig +short myip.opendns.com @resolver1.opendns.com"
+alias ipp="dig -4 +short myip.opendns.com @resolver1.opendns.com"
+alias ipp6="dig -6 +short AAAA myip.opendns.com @resolver1.opendns.com"
 alias ipl="ip route get 1.1.1.1 2>/dev/null | awk 'NR==1{print \$7}'"
 
 # Miscellaneous
