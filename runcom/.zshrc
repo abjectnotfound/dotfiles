@@ -93,7 +93,8 @@ export CLOUDSDK_PYTHON_SITEPACKAGES=1
 
 # Homebrew cleanup
 export HOMEBREW_CLEANUP_MAX_AGE_DAYS=30
-export HOMEBREW_AUTOREMOVE=1
+# gcloud-cli is marked auto_updates, but its self-updater is broken on macOS, so let brew upgrade it
+export HOMEBREW_UPGRADE_GREEDY_CASKS="gcloud-cli"
 
 # Prompt and shell integrations
 
