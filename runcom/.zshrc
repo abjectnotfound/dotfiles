@@ -9,10 +9,12 @@
 #
 # Replaces the old oh-my-zsh + Powerlevel10k setup.
 
-# Resolve DOTFILES_DIR (same logic as .bash_profile; $0:A resolves symlinks)
+# Resolve DOTFILES_DIR (same logic as .bash_profile). %x is the file being
+# sourced; $0 would be the shell itself (e.g. /bin/zsh) in startup files.
+# :A resolves symlinks.
 
-CURRENT_SCRIPT=${0:A}
-if [[ $0 == */* && -f $CURRENT_SCRIPT ]]; then
+CURRENT_SCRIPT=${${(%):-%x}:A}
+if [[ -f $CURRENT_SCRIPT ]]; then
   DOTFILES_DIR=${CURRENT_SCRIPT:h:h}
 fi
 if [[ -z $DOTFILES_DIR || ! -d $DOTFILES_DIR/system ]]; then
