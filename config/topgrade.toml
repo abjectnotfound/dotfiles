@@ -12,3 +12,6 @@ system_prune = true
 [git]
 repos = ["~/src/*/"]
 fallback_to_fetch_default = true
+
+[firmware]
+upgrade = true
