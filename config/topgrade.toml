@@ -2,7 +2,7 @@
 
 [misc]
 assume_yes = true
-disable = ["node", "system", "pnpm", "yarn", "opencode", "gcloud"]
+disable = ["node", "system", "pnpm", "yarn", "opencode", "gcloud", "cargo"]
 cleanup = true
 
 [containers]
