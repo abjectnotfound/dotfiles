@@ -43,6 +43,7 @@ brew "shellcheck"
 # dev tools
 brew "act"
 brew "ast-grep"
+brew "atuin"
 brew "mise"
 brew "neovim"
 brew "opencode"
