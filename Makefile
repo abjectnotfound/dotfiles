@@ -101,9 +101,15 @@ vscode-extensions: cask-apps
 mise-tools: brew-packages link
 	mise install
 
-# herdr writes its hook scripts and registers them in the agents' settings
+# herdr writes its hook scripts and registers them in the agents' settings.
+# For claude, only the hook script is taken: config/agents/.claude/settings.json
+# registers it with a portable path, and herdr would add an absolute-path duplicate.
 herdr-integrations: brew-packages link
-	herdr integration install claude
+	tmp=$$(mktemp -d) && mkdir -p "$$tmp/.claude" && \
+		HOME="$$tmp" herdr integration install claude && \
+		mkdir -p "$(HOME)/.claude/hooks" && \
+		cp "$$tmp/.claude/hooks/herdr-agent-state.sh" "$(HOME)/.claude/hooks/" && \
+		rm -rf "$$tmp"
 	herdr integration install opencode
 
 duti:
