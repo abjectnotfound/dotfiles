@@ -15,3 +15,9 @@ fallback_to_fetch_default = true
 
 [firmware]
 upgrade = true
+
+[post_commands]
+# atuin's daemon keeps running the old binary after `brew upgrade`; restart it if the service is active
+"Restart atuin daemon" = "brew services list | grep -q '^atuin .*started' && brew services restart atuin || true"
+# podman machine's gvproxy runs from a versioned Cellar path that `brew cleanup` deletes; restart the VM only if it's running an old version
+"Restart podman machine" = '''running=$(ps -axo command | grep -o '/opt/homebrew/Cellar/podman/[^/]*/' | head -1); installed="$(realpath "$(brew --prefix podman)")/"; if [ -n "$running" ] && [ "$running" != "$installed" ]; then podman machine stop && podman machine start; fi'''
