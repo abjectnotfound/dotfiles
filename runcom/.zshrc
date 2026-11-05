@@ -107,6 +107,7 @@ command -v atuin >/dev/null && eval "$(atuin init zsh)"
 command -v zoxide >/dev/null && eval "$(zoxide init zsh)"
 command -v mise >/dev/null && eval "$(mise activate zsh)"
 command -v thefuck >/dev/null && eval $(thefuck --alias)
+command -v bun >/dev/null && eval "$(SHELL=zsh bun completions)"
 
 # Route package managers through Socket Firewall; must come after mise activate (see sfw-shims/)
 export PATH="$DOTFILES_DIR/sfw-shims:$PATH"

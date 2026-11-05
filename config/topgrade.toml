@@ -2,12 +2,14 @@
 
 [misc]
 assume_yes = true
-disable = ["node", "system", "pnpm", "yarn", "opencode", "gcloud", "cargo"]
+disable = ["node", "system", "pnpm", "yarn", "opencode", "gcloud", "cargo", "bun_packages"]
 cleanup = true
 
 [containers]
 runtime = "podman"
 system_prune = true
+# ghcr.io now returns 403 for this image (no longer public), so the pull always fails
+ignored_containers = ["ghcr.io/paloaltonetworks/expedition-db:2.1.1"]
 
 [git]
 repos = ["~/src/*/"]
