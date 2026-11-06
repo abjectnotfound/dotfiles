@@ -1,0 +1,10 @@
+# Shared SSH settings, included from ~/.ssh/config via `Include ~/.config/ssh/config`
+# (added by `make link`). Keep machine-specific hosts in ~/.ssh/config itself.
+
+# UseKeychain is macOS-only; let other platforms skip it instead of erroring.
+IgnoreUnknown UseKeychain
+
+Host github.com
+    # Remember key passphrases in the macOS keychain and load keys into the agent on first use.
+    AddKeysToAgent yes
+    UseKeychain yes

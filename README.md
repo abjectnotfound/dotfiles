@@ -68,21 +68,70 @@ Running `make` with the Makefile is idempotent. The installation process in the 
 
 ## Post-Installation
 
-1. Set your Git identity:
+1. Review the Git identity. It is defined in [config/git/config](./config/git/config) rather than set with
+   `git config --global` (`~/.config/git` is symlinked into this repo, so `--global` writes to the tracked file).
+   See [Multiple GitHub accounts](#multiple-github-accounts) for how identities switch per repo; if you forked
+   this repo, replace the names, emails and keys there with your own.
+
+2. Set up the SSH keys the git config expects (`gpg.format = ssh`):
+
+   | Account | Auth key (`core.sshCommand`) | Signing key (`user.signingkey`) |
+   | --- | --- | --- |
+   | Personal (default) | `~/.ssh/id_ed25519_abjectnotfound` | `~/.ssh/id_ed25519_abjectnotfound_signing.pub` |
+   | Work ([config-rigorai](./config/git/config-rigorai)) | `~/.ssh/id_ed25519` | `~/.ssh/id_ed25519_rigorai_signing.pub` |
+
+   **Signing keys are reused across machines and stored in a password manager.** One signing key per account
+   means one key to register on GitHub, one line in [allowed_signers](./config/git/allowed_signers), and one key
+   to rotate. Restore each one from the password manager instead of generating a new key:
 
 ```sh
-git config --global user.name "your name"
-git config --global user.email "your@email.com"
-git config --global github.user "your-github-username"
+# Save the private key and public key from the password manager entry, then:
+chmod 600 ~/.ssh/id_ed25519_abjectnotfound_signing
+chmod 644 ~/.ssh/id_ed25519_abjectnotfound_signing.pub
+# Check the key pair is intact and matches allowed_signers
+k=~/.ssh/id_ed25519_abjectnotfound_signing
+[ "$(ssh-keygen -y -f $k | cut -d' ' -f2)" = "$(cut -d' ' -f2 $k.pub)" ] && \
+  grep -qF "$(cut -d' ' -f2 $k.pub)" ~/.config/git/allowed_signers && echo OK
 ```
 
-2. Configure SSH commit signing with your existing SSH key. The git config is pre-configured for SSH signing via `gpg.format = ssh`.
+   Protect stored signing keys with a passphrase, since a leak from any machine exposes the key everywhere.
+   Alternatively, use your password manager's SSH agent (e.g. 1Password or Bitwarden) and keep only the `.pub`
+   file on disk: git signs through the agent when `user.signingkey` points at a public key.
 
-3. Authenticate [GitHub CLI](https://cli.github.com/manual/gh_auth_login):
+   **Passphrases are entered once per machine** (macOS). Store each key's passphrase in the keychain and load it
+   into the agent:
 
 ```sh
-gh auth login
+ssh-add --apple-use-keychain ~/.ssh/id_ed25519_abjectnotfound_signing   # repeat for each key
 ```
+
+   After that nothing prompts again, including after a reboot:
+   - Auth keys: [config/ssh/config](./config/ssh/config) sets `AddKeysToAgent` and `UseKeychain` for `github.com`.
+     `make link` adds `Include ~/.config/ssh/config` to the top of `~/.ssh/config`, which stays a local file for
+     machine-specific hosts.
+   - Signing keys: git signs with `ssh-keygen`, which ignores `~/.ssh/config` and only avoids prompting when the
+     key is already in the agent, so [system/macos/.env](./system/macos/.env) runs `ssh-add --apple-load-keychain`
+     in each shell.
+
+   **Auth keys are per machine.** Generate a new one on each machine and add it to the account as an
+   *authentication* key, so a single machine's access can be revoked on its own:
+
+```sh
+ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519_abjectnotfound -C "abjectnotfound@$(hostname -s)"
+```
+
+   **First time only** (no key in the password manager yet): generate the signing key with
+   `ssh-keygen -t ed25519 -f ~/.ssh/<name>_signing`, store both halves in the password manager, add the `.pub` to
+   GitHub as a *signing* key, and add a line for it to [allowed_signers](./config/git/allowed_signers).
+
+3. Authenticate [GitHub CLI](https://cli.github.com/manual/gh_auth_login) once per account:
+
+```sh
+gh auth login   # personal account
+gh auth login   # work account
+```
+
+   There is no need to `gh auth switch` afterwards; the [gh shim](#multiple-github-accounts) picks the account per repo.
 
 4. Configure the [Starship](https://starship.rs) prompt (optional): run `starship preset` to customize.
 
@@ -99,12 +148,53 @@ dot macos
 dot firefox-config
 ```
 
-7. Populate this file with anything you need sourced in each shell:
+7. Populate these files with anything you need sourced in each shell (`local/` is gitignored, so it stays on this machine):
 
 ```sh
 mkdir -p $DOTFILES_DIR/local
 touch $DOTFILES_DIR/local/.profile
 touch $DOTFILES_DIR/local/.env
+```
+
+   For example, to skip casks from the [Caskfile](./install/Caskfile) on one machine only (also honored by `make cask-apps`):
+
+```sh
+# local/.env
+export HOMEBREW_BUNDLE_CASK_SKIP="docker-desktop dropbox"
+```
+
+## Multiple GitHub accounts
+
+This setup uses a personal GitHub account by default and a separate work account (here, a GitHub Enterprise
+Managed User) for repos in the work organizations. Everything is chosen from the repo's remote URL, so nothing
+needs switching by hand.
+
+- **Git** ([config/git/config](./config/git/config)): the `[user]` and `[core]` sections hold the personal
+  identity. At the end of the file, `includeIf "hasconfig:remote.*.url:..."` blocks load
+  [config-rigorai](./config/git/config-rigorai) for remotes in the work orgs. It overrides the commit email
+  (the account's no-reply address), signing key, SSH key (`core.sshCommand`) and `github.user`.
+- **gh** ([gh-shims/gh](./gh-shims/gh), put first on `PATH` by `.zshrc`): runs the real `gh` with the token of
+  the account named by `git config github.user`. `-R OWNER/REPO` and `gh repo <cmd> OWNER/REPO` are matched
+  against the same org list. `gh auth ...` and an explicit `GH_TOKEN` are passed through.
+- **Drift warning**: the shim caches which owners each logged-in account belongs to
+  (`~/.cache/gh-shim/owners`, refreshed daily). If git would route a repo to a different account, it prints a
+  warning in the terminal. Orgs reached only through the enterprise (not as a member) can't be detected.
+
+To add a work org, add both lines for it to the `includeIf` list at the **end** of
+[config/git/config](./config/git/config); they must come last so they override the defaults. Org names are
+case-sensitive and must match the remote URL:
+
+```ini
+[includeIf "hasconfig:remote.*.url:**/NewOrg/**"]
+    path = ~/.config/git/config-rigorai
+[includeIf "hasconfig:remote.*.url:*:NewOrg/**"]
+    path = ~/.config/git/config-rigorai
+```
+
+`git clone` of a work repo runs before the remote exists, so it uses the personal SSH key. Clone with the work key explicitly:
+
+```sh
+git clone -c core.sshCommand="ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes" git@github.com:NewOrg/repo.git
 ```
 
 ## The `dot` command
@@ -129,7 +219,9 @@ Commands:
 
 - Shell: Bash (`.bash_profile`) and Zsh (`.zshrc`) configs, sourcing shared `system/*` files
 - Prompt: Starship (cross-shell)
-- Git: Full config with SSH signing, delta pager, VS Code diff/merge tools
+- Git: Full config with SSH signing, delta pager, VS Code diff/merge tools, and per-org identities ([details](#multiple-github-accounts))
+- GitHub CLI: `gh` config and a shim that picks the account per repo
+- SSH: shared settings in `~/.config/ssh/config`, included from a local `~/.ssh/config`
 - Terminals: Ghostty, WezTerm, Kitty configs
 - Editor: Neovim (LazyVim), VS Code
 - Tools: Television (67 cable channels), OpenCode, Trippy, btop, htop, mise
