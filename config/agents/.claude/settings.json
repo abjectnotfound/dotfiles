@@ -1,4 +1,28 @@
 {
   "theme": "dark-daltonized",
-  "hooks": {"SessionStart":[{"matcher":"^(startup|resume|clear|compact|fork)$","hooks":[{"type":"command","command":"f=\"$HOME/.claude/hooks/herdr-agent-state.sh\"; [ -f \"$f\" ] || exit 0; bash \"$f\" session","timeout":10}]}]}
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "^(startup|resume|clear|compact|fork)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=\"$HOME/.claude/hooks/herdr-agent-state.sh\"; [ -f \"$f\" ] || exit 0; bash \"$f\" session",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  },
+  "extraKnownMarketplaces": {
+    "humanizer": {
+      "source": {
+        "source": "github",
+        "repo": "blader/humanizer"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "humanizer@humanizer": true
+  }
 }
