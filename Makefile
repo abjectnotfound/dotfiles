@@ -92,7 +92,8 @@ taps: brew
 	done
 
 cask-apps: brew
-	brew bundle --file=$(DOTFILES_DIR)/install/Caskfile || true
+	[ -f $(DOTFILES_DIR)/local/.env ] && . $(DOTFILES_DIR)/local/.env; \
+		brew bundle --file=$(DOTFILES_DIR)/install/Caskfile || true
 
 vscode-extensions: cask-apps
 	for EXT in $$(cat install/Codefile); do code --install-extension $$EXT; done
