@@ -1,7 +1,14 @@
 [user]
 	name = Alex Ciavarra
-	email = abjectnotfound@proton.me
-	signingkey = ~/.ssh/id_ed25519.pub
+	signingkey = ~/.ssh/id_ed25519_abjectnotfound_signing.pub
+	useconfigonly = true
+
+# =====================================================================
+# Conditional Emails
+# =====================================================================
+[includeIf "hasconfig:remote.*.url:**/*github.com/**"]
+    [user]
+        email = 61711474+abjectnotfound@users.noreply.github.com
 
 [github]
 	user = abjectnotfound
