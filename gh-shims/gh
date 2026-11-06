@@ -1,0 +1,108 @@
+#!/usr/bin/env bash
+# gh shim: run gh as the GitHub account that matches the current repo.
+#
+# The account comes from `git config github.user`, which the Rigor AI includeIf
+# blocks in config/git/config switch per repo (see config/git/config-rigorai).
+# For `-R/--repo OWNER/REPO` and `gh repo <cmd> OWNER/REPO`, the owner is
+# checked against the orgs in those includeIf blocks instead.
+# An explicit GH_TOKEN/GITHUB_TOKEN, and `gh auth ...`, are left untouched.
+#
+# Drift check: the shim caches which owners (user + orgs) each logged-in gh
+# account belongs to (~/.cache/gh-shim/owners, refreshed daily in the
+# background). If the repo's owner belongs to an account other than the one git
+# routes it to, it prints a warning to the terminal; it never changes the account.
+# Force a refresh with: rm ~/.cache/gh-shim/owners
+
+self="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+real=""
+IFS=: read -ra dirs <<<"$PATH"
+for d in "${dirs[@]}"; do
+  [ "$d" = "$self" ] && continue
+  if [ -x "$d/gh" ] && [ ! -d "$d/gh" ]; then real="$d/gh"; break; fi
+done
+[ -n "$real" ] || { echo "gh shim: real gh not found on PATH" >&2; exit 127; }
+
+if [ -n "${GH_TOKEN:-}${GITHUB_TOKEN:-}" ] || [ "${1:-}" = "auth" ]; then
+  exec "$real" "$@"
+fi
+
+# Owner named explicitly on the command line, if any.
+owner=""
+args=("$@")
+for ((i = 0; i < ${#args[@]}; i++)); do
+  case "${args[i]}" in
+    -R | --repo) owner="${args[i + 1]:-}" ;;
+    -R* ) owner="${args[i]#-R}" ;;
+    --repo=*) owner="${args[i]#--repo=}" ;;
+  esac
+done
+# `gh repo <view|clone|fork|...> OWNER/REPO`
+if [ -z "$owner" ] && [ "${1:-}" = "repo" ] && [[ "${3:-}" == */* && "${3:-}" != -* ]]; then
+  owner="$3"
+fi
+
+owner_of() { # URL or OWNER/REPO -> OWNER
+  local o="${1#*github.com[:/]}"
+  printf '%s' "${o%%/*}"
+}
+
+account=""
+if [ -n "$owner" ]; then
+  owner="$(owner_of "$owner")"
+  rigor_orgs="$(git config --global --name-only --get-regexp '^includeif\..*\.path$' 2>/dev/null |
+    sed -n 's#^includeif\.hasconfig:remote\.\*\.url:.*[/:]\([^/:*]*\)/\*\*\.path$#\1#p' | sort -u)"
+  if grep -qxF "$owner" <<<"$rigor_orgs"; then
+    account="$(git config -f "$HOME/.config/git/config-rigorai" github.user)"
+  else
+    account="$(git config --global github.user)"
+  fi
+else
+  account="$(git config github.user 2>/dev/null)"
+  url="$(git remote get-url origin 2>/dev/null || git remote get-url "$(git remote 2>/dev/null | head -1)" 2>/dev/null)"
+  [[ "$url" == *github.com[:/]* ]] && owner="$(owner_of "$url")"
+fi
+
+# --- Drift check -------------------------------------------------------------
+cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/gh-shim"
+cache="$cache_dir/owners"
+
+refresh_cache() { # writes "owner<TAB>account" lines for every logged-in account
+  mkdir -p "$cache_dir"
+  mkdir "$cache_dir/lock" 2>/dev/null || return 0
+  trap 'rmdir "$cache_dir/lock"' EXIT
+  local tmp acct tok
+  tmp="$(mktemp "$cache_dir/owners.XXXXXX")"
+  for acct in $("$real" auth status --hostname github.com 2>&1 |
+    sed -n 's/.*Logged in to github\.com account \([^ ]*\).*/\1/p'); do
+    tok="$("$real" auth token -u "$acct" 2>/dev/null)" || continue
+    printf '%s\t%s\n' "$acct" "$acct" >>"$tmp"
+    GH_TOKEN="$tok" "$real" api --paginate user/orgs --jq '.[].login' 2>/dev/null |
+      while read -r org; do printf '%s\t%s\n' "$org" "$acct"; done >>"$tmp"
+  done
+  [ -s "$tmp" ] && mv "$tmp" "$cache" || rm -f "$tmp"
+}
+
+if [ -n "$owner" ] && [ -t 2 ]; then
+  if [ ! -f "$cache" ] || [ -n "$(find "$cache" -mmin +1440 2>/dev/null)" ]; then
+    (refresh_cache >/dev/null 2>&1 &)
+  fi
+  if [ -f "$cache" ]; then
+    # GitHub owners are case-insensitive; git's includeIf matching is not.
+    owners_accts="$(awk -F'\t' -v o="$owner" 'tolower($1) == tolower(o) { print $2 }' "$cache" | sort -u)"
+    if [ -n "$owners_accts" ] && ! grep -qxF "${account:-}" <<<"$owners_accts"; then
+      printf '\033[33mgh shim:\033[0m %s belongs to %s, but git config routes it to %s.\n' \
+        "$owner" "$(paste -sd, - <<<"$owners_accts")" "${account:-<none>}" >&2
+      printf '         Add it to the includeIf list in ~/.dotfiles/config/git/config (names are case-sensitive).\n' >&2
+    fi
+  fi
+fi
+
+if [ -n "$account" ]; then
+  token="$("$real" auth token -u "$account" 2>/dev/null)"
+  if [ -n "$token" ]; then
+    GH_TOKEN="$token" exec "$real" "$@"
+  fi
+fi
+
+exec "$real" "$@"

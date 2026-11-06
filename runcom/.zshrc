@@ -112,6 +112,9 @@ command -v bun >/dev/null && eval "$(SHELL=zsh bun completions)"
 # Route package managers through Socket Firewall; must come after mise activate (see sfw-shims/)
 export PATH="$DOTFILES_DIR/sfw-shims:$PATH"
 
+# Run gh as the GitHub account matching the current repo (see gh-shims/gh)
+export PATH="$DOTFILES_DIR/gh-shims:$PATH"
+
 # Wrap up
 
 unset CURRENT_SCRIPT DOTFILE
