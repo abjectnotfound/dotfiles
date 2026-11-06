@@ -10,3 +10,6 @@ config/opencode/herdr-opencode/
 
 # opencode server credentials
 config/opencode/service.json
+
+# gh login state (written by `gh auth`; tokens live in the keychain)
+config/gh/hosts.yml
