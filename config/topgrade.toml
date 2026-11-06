@@ -12,7 +12,7 @@ system_prune = true
 ignored_containers = ["ghcr.io/paloaltonetworks/expedition-db:2.1.1"]
 
 [git]
-repos = ["~/src/*/"]
+repos = ["~/src/*/", "~/src/*/*"]
 fallback_to_fetch_default = true
 
 [firmware]
