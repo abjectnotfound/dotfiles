@@ -1,19 +1,14 @@
 [user]
 	name = Alex Ciavarra
+	email = 61711474+abjectnotfound@users.noreply.github.com
 	signingkey = ~/.ssh/id_ed25519_abjectnotfound_signing.pub
-	useconfigonly = true
-
-# =====================================================================
-# Conditional Emails
-# =====================================================================
-[includeIf "hasconfig:remote.*.url:**/*github.com/**"]
-    [user]
-        email = 61711474+abjectnotfound@users.noreply.github.com
+	useConfigOnly = true
 
 [github]
 	user = abjectnotfound
 
 [core]
+	sshCommand = ssh -i ~/.ssh/id_ed25519_abjectnotfound -o IdentitiesOnly=yes
 	excludesfile = ~/.config/git/ignore
 	editor = nvim
 	filemode = false
@@ -136,8 +131,29 @@
 [commit]
 	gpgsign = true
 [credential "https://github.com"]
-	helper =
 	helper = !/opt/homebrew/bin/gh auth git-credential
 
 [url "ssh://git@github.com/"]
 	insteadOf = https://github.com/
+
+# Must stay at the END of the file so these override the defaults above.
+# =====================================================================
+# Rigor AI enterprise orgs -> alex-ciavarra_innoai identity
+# (both https://.../Org/ and git@github.com:Org/ remote forms)
+# =====================================================================
+[includeIf "hasconfig:remote.*.url:**/DefIntLab/**"]
+    path = ~/.config/git/config-rigorai
+[includeIf "hasconfig:remote.*.url:*:DefIntLab/**"]
+    path = ~/.config/git/config-rigorai
+[includeIf "hasconfig:remote.*.url:**/InnowateEngineering/**"]
+    path = ~/.config/git/config-rigorai
+[includeIf "hasconfig:remote.*.url:*:InnowateEngineering/**"]
+    path = ~/.config/git/config-rigorai
+[includeIf "hasconfig:remote.*.url:**/Rigor-Architecture/**"]
+    path = ~/.config/git/config-rigorai
+[includeIf "hasconfig:remote.*.url:*:Rigor-Architecture/**"]
+    path = ~/.config/git/config-rigorai
+[includeIf "hasconfig:remote.*.url:**/RigorPOC-Engineering/**"]
+    path = ~/.config/git/config-rigorai
+[includeIf "hasconfig:remote.*.url:*:RigorPOC-Engineering/**"]
+    path = ~/.config/git/config-rigorai
