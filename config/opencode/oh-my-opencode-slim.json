@@ -1,6 +1,7 @@
 {
   "$schema": "https://unpkg.com/oh-my-opencode-slim@latest/oh-my-opencode-slim.schema.json",
   "preset": "go-cheap",
+  "disabled_agents": [],
   "multiplexer": {
     "type": "herdr"
   },
@@ -25,7 +26,7 @@
         ],
         "mcps": []
       },
-      "librarian": {
+      "explorer": {
         "model": "openai/gpt-5.6-luna",
         "variant": "low",
         "skills": [],
@@ -34,12 +35,6 @@
           "context7",
           "gh_grep"
         ]
-      },
-      "explorer": {
-        "model": "openai/gpt-5.6-luna",
-        "variant": "low",
-        "skills": [],
-        "mcps": []
       },
       "designer": {
         "model": "openai/gpt-5.6-luna",
@@ -67,22 +62,16 @@
         ]
       },
       "oracle": {
-        "model": "opencode-go/qwen3.7-max",
-        "variant": "max",
+        "model": "opencode-go/qwen3.8-max",
+        "variant": "xhigh",
         "skills": [
           "simplify"
         ],
         "mcps": []
       },
       "explorer": {
-        "model": "opencode-go/deepseek-v4-flash",
+        "model": "opencode-go/deepseek-v4.1-flash",
         "variant": "max",
-        "skills": [],
-        "mcps": []
-      },
-      "librarian": {
-        "model": "opencode-go/deepseek-v4-flash",
-        "variant": "high",
         "skills": [],
         "mcps": [
           "websearch",
@@ -97,14 +86,15 @@
         "mcps": []
       },
       "fixer": {
-        "model": "opencode-go/deepseek-v4-flash",
+        "model": "opencode-go/deepseek-v4.1-flash",
         "variant": "high",
         "skills": [],
-        "mcps": []
+        "mcps": [
+          "codegraph"
+        ]
       },
       "observer": {
-        "model": "opencode-go/mimo-v2.5",
-        "variant": "max",
+        "model": "opencode-go/mimo-v2.6-flash",
         "skills": [],
         "mcps": []
       }
@@ -124,11 +114,14 @@
         ]
       },
       "explorer": {
-        "model": "opencode/deepseek-v4-flash-free",
+        "model": "opencode/deepseek-v4.1-flash-free",
         "variant": "high",
         "skills": [],
         "mcps": [
-          "codegraph"
+          "codegraph",
+          "websearch",
+          "context7",
+          "gh_grep"
         ]
       },
       "oracle": {
@@ -141,17 +134,6 @@
           "codegraph"
         ]
       },
-      "librarian": {
-        "model": "opencode/deepseek-v4-flash-free",
-        "variant": "high",
-        "skills": [],
-        "mcps": [
-          "websearch",
-          "context7",
-          "gh_grep",
-          "mgrep"
-        ]
-      },
       "designer": {
         "model": "openai/gpt-5.6-luna",
         "variant": "medium",
@@ -159,7 +141,7 @@
         "mcps": []
       },
       "fixer": {
-        "model": "opencode/deepseek-v4-flash-free",
+        "model": "opencode/deepseek-v4.1-flash-free",
         "variant": "high",
         "skills": [],
         "mcps": [
@@ -169,8 +151,7 @@
     },
     "go-cheap": {
       "orchestrator": {
-        "model": "opencode-go/mimo-v2.5-pro",
-        "variant": "medium",
+        "model": "opencode-go/mimo-v2.6-pro",
         "skills": [
           "*"
         ],
@@ -181,17 +162,19 @@
         ]
       },
       "explorer": {
-        "model": "opencode-go/deepseek-v4-flash",
+        "model": "opencode-go/deepseek-v4.1-flash",
         "variant": "high",
         "skills": [],
         "mcps": [
-          "codegraph"
+          "codegraph",
+          "websearch",
+          "context7",
+          "gh_grep"
         ],
         "temperature": 1
       },
       "oracle": {
-        "model": "opencode-go/mimo-v2.5-pro",
-        "variant": "high",
+        "model": "opencode-go/mimo-v2.6-pro",
         "skills": [
           "simplify"
         ],
@@ -199,96 +182,31 @@
           "codegraph"
         ]
       },
-      "librarian": {
-        "model": "opencode-go/deepseek-v4-flash",
-        "variant": "high",
-        "skills": [],
-        "mcps": [
-          "websearch",
-          "context7",
-          "gh_grep",
-          "mgrep"
-        ],
-        "temperature": 1
-      },
       "designer": {
-        "model": "opencode-go/mimo-v2.5-pro",
-        "variant": "medium",
+        "model": "opencode-go/mimo-v2.6-pro",
         "skills": [],
         "mcps": []
       },
       "fixer": {
-        "model": "opencode-go/deepseek-v4-flash",
+        "model": "opencode-go/deepseek-v4.1-flash",
         "variant": "high",
         "skills": [],
         "mcps": [
           "codegraph"
         ],
         "temperature": 1
-      }
-    },
-    "opencode-free": {
-      "orchestrator": {
-        "model": "opencode/mimo-v2.5-free",
-        "variant": "high",
-        "skills": [
-          "*"
-        ],
-        "mcps": [
-          "!context7",
-          "!gh_app",
-          "websearch"
-        ]
       },
-      "explorer": {
-        "model": "opencode/deepseek-v4-flash-free",
-        "variant": "high",
-        "skills": [],
-        "mcps": [
-          "codegraph"
-        ]
-      },
-      "oracle": {
-        "model": "opencode/mimo-v2.5-free",
-        "variant": "high",
-        "skills": [
-          "simplify"
-        ],
-        "mcps": [
-          "codegraph"
-        ]
-      },
-      "librarian": {
-        "model": "opencode/deepseek-v4-flash-free",
-        "variant": "high",
-        "skills": [],
-        "mcps": [
-          "websearch",
-          "context7",
-          "gh_grep",
-          "mgrep"
-        ]
-      },
-      "designer": {
-        "model": "opencode/mimo-v2.5-free",
+      "observer": {
+        "model": "opencode-go/gpt-6-luna",
         "variant": "high",
         "skills": [],
         "mcps": []
-      },
-      "fixer": {
-        "model": "opencode/deepseek-v4-flash-free",
-        "variant": "high",
-        "skills": [],
-        "mcps": [
-          "codegraph"
-        ]
       }
     }
   },
   "agents": {
     "fast-generic": {
-      "model": "opencode-go/deepseek-v4-flash",
-      "variant": "low",
+      "model": "opencode-go/mimo-v2.6-flash",
       "prompt": "You are a fast generic execution agent for routine mechanical command work. Run requested shell commands, inspect results, and report concise outcomes. For git commits or pushes, inspect git status, git diff, and recent log first; stage only intended files; avoid secrets; preserve repository commit-message style; never amend, rebase, reset --hard, clean, force-push, delete branches, or perform destructive history operations unless the user explicitly requested that exact operation. Do not edit code or make architecture/design decisions.",
       "orchestratorPrompt": "Delegate to @fast-generic for routine mechanical command work: git status/diff/log reconnaissance, normal commit preparation, creating commits, pushing commits, and no-edit command validation such as lint, typecheck, static verification, tests, builds, or package-manager equivalents. Ask it to inspect diffs before committing, stage only intended files, avoid secrets, preserve repository commit-message style, and report final commit hashes or push results. Do not use it for code edits, design work, architecture, debugging strategy, docs research, or destructive git history operations such as amend, rebase, reset --hard, clean, force-push, or deleting branches unless the user explicitly requested that exact operation.",
       "skills": [],
