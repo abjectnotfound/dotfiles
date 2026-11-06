@@ -26,6 +26,7 @@ trufflehog = "latest"
 
 # npm tools
 "npm:@antfu/ni" = "latest"
+"npm:@colbymchenry/codegraph" = "latest"
 # mise skips npm install scripts, so fetch puppeteer's headless Chrome ourselves
 "npm:@mermaid-js/mermaid-cli" = { version = "latest", postinstall = "node \"$MISE_TOOL_INSTALL_PATH/lib/node_modules/@mermaid-js/mermaid-cli/node_modules/puppeteer/install.mjs\"" }
 "npm:fkill-cli" = "latest"
