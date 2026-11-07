@@ -12,6 +12,16 @@
           }
         ]
       }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "codegraph prompt-hook"
+          }
+        ]
+      }
     ]
   },
   "extraKnownMarketplaces": {
@@ -24,5 +34,10 @@
   },
   "enabledPlugins": {
     "humanizer@humanizer": true
+  },
+  "permissions": {
+    "allow": [
+      "mcp__codegraph__*"
+    ]
   }
 }
