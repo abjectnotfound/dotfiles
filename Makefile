@@ -58,7 +58,7 @@ link: stow-$(OS)
 	stow --no-folding -d "$(DOTFILES_DIR)/config" -t "$(HOME)" agents
 	mkdir -p "$(HOME)/.ssh" && chmod 700 "$(HOME)/.ssh"
 	@if ! grep -qxF 'Include ~/.config/ssh/config' "$(HOME)/.ssh/config" 2>/dev/null; then \
-		{ printf 'Include ~/.config/ssh/config\n\n'; cat "$(HOME)/.ssh/config" 2>/dev/null; } > "$(HOME)/.ssh/config.tmp" && \
+		{ printf 'Include ~/.config/ssh/config\n\n'; cat "$(HOME)/.ssh/config" 2>/dev/null || true; } > "$(HOME)/.ssh/config.tmp" && \
 		mv "$(HOME)/.ssh/config.tmp" "$(HOME)/.ssh/config" && echo "Added Include to ~/.ssh/config"; \
 	fi
 
