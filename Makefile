@@ -62,6 +62,13 @@ link: stow-$(OS)
 		mv "$(HOME)/.ssh/config.tmp" "$(HOME)/.ssh/config" && echo "Added Include to ~/.ssh/config"; \
 	fi
 
+# Personal machines only: default SSH to the personal key (config/ssh/config.personal)
+ssh-personal: link
+	@if ! grep -qxF 'Include ~/.config/ssh/config.personal' "$(HOME)/.ssh/config"; then \
+		{ printf 'Include ~/.config/ssh/config.personal\n'; cat "$(HOME)/.ssh/config"; } > "$(HOME)/.ssh/config.tmp" && \
+		mv "$(HOME)/.ssh/config.tmp" "$(HOME)/.ssh/config" && echo "Added personal SSH defaults to ~/.ssh/config"; \
+	fi
+
 unlink: stow-$(OS)
 	stow --delete -t "$(HOME)" runcom
 	stow --delete -t "$(XDG_CONFIG_HOME)" --ignore='^agents$$' config

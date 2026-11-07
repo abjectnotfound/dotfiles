@@ -1,0 +1,5 @@
+# Default key for personal machines, included from ~/.ssh/config by `make ssh-personal`.
+# Not enabled on the work machine. git picks its own key per repo (core.sshCommand).
+
+Host *
+    IdentityFile ~/.ssh/id_ed25519_abjectnotfound

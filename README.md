@@ -108,7 +108,8 @@ ssh-add --apple-use-keychain ~/.ssh/id_ed25519_abjectnotfound_signing   # repeat
    After that nothing prompts again, including after a reboot:
    - Auth keys: [config/ssh/config](./config/ssh/config) sets `AddKeysToAgent` and `UseKeychain` for `github.com`.
      `make link` adds `Include ~/.config/ssh/config` to the top of `~/.ssh/config`, which stays a local file for
-     machine-specific hosts.
+     machine-specific hosts. On personal machines, also run `make ssh-personal` to make the personal auth key
+     the default for all other hosts ([config.personal](./config/ssh/config.personal)); skip it on the work machine.
    - Signing keys: git signs with `ssh-keygen`, which ignores `~/.ssh/config` and only avoids prompting when the
      key is already in the agent, so [system/macos/.env](./system/macos/.env) runs `ssh-add --apple-load-keychain`
      in each shell.
