@@ -125,13 +125,18 @@ herdr-integrations: brew-packages link
 		rm -rf "$$tmp"
 	herdr integration install opencode
 
-# Create this machine's SOPS age key in the login keychain (once per machine; macOS only) and print its
-# public key, which goes in .sops.yaml. Rerunning only prints the public key.
+# Import the shared SOPS age key (kept in the password manager) into the login keychain, once per machine
+# (macOS only), and check its public key against .sops.yaml. Rerunning only does the check.
+SOPS_KEYCHAIN_SERVICE := sops-age
 sops-key:
-	@security find-generic-password -a "$$USER" -s sops-age >/dev/null 2>&1 || \
-		security add-generic-password -a "$$USER" -s sops-age -l "SOPS age key" \
-			-w "$$(age-keygen 2>/dev/null | grep '^AGE-SECRET-KEY-')"
-	@security find-generic-password -a "$$USER" -s sops-age -w | age-keygen -y
+	@if ! security find-generic-password -a "$$USER" -s $(SOPS_KEYCHAIN_SERVICE) >/dev/null 2>&1; then \
+		read -rsp "Paste the SOPS age key from the password manager (AGE-SECRET-KEY-1...): " key; echo; \
+		case "$$key" in AGE-SECRET-KEY-1*) ;; *) echo "Not an age secret key" >&2; exit 1 ;; esac; \
+		security add-generic-password -a "$$USER" -s $(SOPS_KEYCHAIN_SERVICE) -l "SOPS age key" -w "$$key"; \
+	fi
+	@pub=$$(security find-generic-password -a "$$USER" -s $(SOPS_KEYCHAIN_SERVICE) -w | age-keygen -y) && \
+		if grep -qF "$$pub" "$(DOTFILES_DIR)/.sops.yaml"; then echo "SOPS age key OK: $$pub"; \
+		else echo "Keychain key $$pub is not in .sops.yaml" >&2; exit 1; fi
 
 # Download or refresh the GeoLite2 database used by trippy. The MaxMind credentials in secrets/geoip.env
 # are SOPS-encrypted and only exist decrypted in geoipupdate's environment.

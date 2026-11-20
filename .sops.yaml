@@ -1,8 +1,7 @@
-# SOPS encrypts secrets/*.env to each machine's age key, kept in that machine's login keychain.
-# Add a machine: run `make sops-key` on it, add the printed key below, then run
-# `sops updatekeys secrets/*.env` on a machine that can already decrypt.
+# SOPS encrypts secrets/*.env to one shared age key. The private key lives in the password manager and,
+# on each machine, in the login keychain (`make sops-key` imports it).
 creation_rules:
   - path_regex: secrets/.*\.env$
     key_groups:
       - age:
-          - age1plt0kzsqvd8dp8hpd7055djyn0gtwz5edy8ca99tl8y4pdc0pqxs23h877  # M-D7R74D2VN4-US
+          - age1plt0kzsqvd8dp8hpd7055djyn0gtwz5edy8ca99tl8y4pdc0pqxs23h877
