@@ -125,6 +125,13 @@ herdr-integrations: brew-packages link
 		rm -rf "$$tmp"
 	herdr integration install opencode
 
+# Download or refresh the GeoLite2 database used by trippy. The MaxMind credentials in secrets/geoip.env
+# are SOPS-encrypted and only exist decrypted in geoipupdate's environment; sops prompts for the key passphrase.
+geoip:
+	mkdir -p "$(HOMEBREW_PREFIX)/var/GeoIP"
+	SOPS_AGE_SSH_PRIVATE_KEY_FILE="$${SOPS_AGE_SSH_PRIVATE_KEY_FILE:-$(HOME)/.ssh/id_ed25519_abjectnotfound}" \
+		sops exec-env "$(DOTFILES_DIR)/secrets/geoip.env" 'geoipupdate -v -f "$(DOTFILES_DIR)/config/geoip/GeoIP.conf"'
+
 duti:
 	duti -v $(DOTFILES_DIR)/install/duti
 

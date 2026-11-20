@@ -196,7 +196,7 @@ max-flows = 64
 #   resolv      - Resolve using the `/etc/resolv.conf` DNS configuration
 #   google      - Resolve using the Google `8.8.8.8` DNS service
 #   cloudflare  - Resolve using the Cloudflare `1.1.1.1` DNS service
-dns-resolve-method = "system"
+dns-resolve-method = "resolv"
 
 # Trace to all IPs resolved from DNS lookup (ICMP only) [default: false]
 #
@@ -208,7 +208,7 @@ dns-resolve-all = false
 #
 # If enabled, AS (autonomous system) information is retrieved during DNS
 # queries.
-dns-lookup-as-info = false
+dns-lookup-as-info = true
 
 # The maximum time to wait to perform DNS queries [default: 5s]
 dns-timeout = "5s"
@@ -300,7 +300,7 @@ tui-icmp-extension-mode = "off"
 #   MaxMind "GeoLite2 City"
 #   IPinfo "IP to Country + ASN Database"
 #   IPinfo "IP to Geolocation Extended Database"
-# geoip-mmdb-file = "/path/to/geoip_file.mmdb"
+geoip-mmdb-file = "/opt/homebrew/var/GeoIP/GeoLite2-City.mmdb"
 
 # How to render GeoIp information.
 #
@@ -311,7 +311,7 @@ tui-icmp-extension-mode = "off"
 #   location - Show latitude and Longitude format GeoIp information
 #
 # Note this value is ignored unless a valid geoip-mmdb-file value is also provided.
-tui-geoip-mode = "off"
+tui-geoip-mode = "short"
 
 # The maximum number of addresses to show per hop [default: auto]
 #
@@ -429,4 +429,3 @@ toggle-as-info = "z"
 toggle-hop-details = "d"
 quit = "q"
 quit-preserve-screen = "shift+q"
-

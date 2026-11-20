@@ -1,0 +1,8 @@
+# SOPS encrypts secrets/*.env to every machine's ~/.ssh/id_ed25519_abjectnotfound public key.
+# After adding a key, run `sops updatekeys secrets/*.env` on a machine that can already decrypt.
+creation_rules:
+  - path_regex: secrets/.*\.env$
+    key_groups:
+      - age:
+          - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINtMmbjyOdE5dbiRDVpYZ9m3jDtNNSZZ+dWWJ8AxQUQL  # M-D7R74D2VN4-US
+          - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOx+4lxRsSfg3fJYf2LtAvf5pd1cn+cP8+BEJet8i609  # Neo

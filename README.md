@@ -164,6 +164,34 @@ touch $DOTFILES_DIR/local/.env
 export HOMEBREW_BUNDLE_CASK_SKIP="docker-desktop dropbox"
 ```
 
+8. Download the GeoLite2 database for Trippy's GeoIP columns and map (prompts for the SSH key passphrase):
+
+```sh
+make geoip
+```
+
+   Rerun it to refresh the database; MaxMind publishes updates twice a week.
+
+## Secrets
+
+The repo is public, so credentials are committed encrypted with [SOPS](https://getsops.io). Each machine's
+`~/.ssh/id_ed25519_abjectnotfound` public key is a recipient in [.sops.yaml](./.sops.yaml), so any of those machines
+can decrypt and nobody else can. Only the values are encrypted; the variable names stay readable in diffs.
+
+| File | Holds | Used by |
+| --- | --- | --- |
+| `secrets/geoip.env` | `GEOIPUPDATE_ACCOUNT_ID`, `GEOIPUPDATE_LICENSE_KEY` | `make geoip` |
+
+```sh
+sops edit secrets/geoip.env                                   # view or change a secret
+sops exec-env secrets/geoip.env 'some-command'                # run a command with the secrets in its environment
+```
+
+**Adding a machine:** append the new machine's `~/.ssh/id_ed25519_abjectnotfound.pub` (the first two fields)
+to `.sops.yaml`, commit and push it, then on a machine that can already decrypt run
+`sops updatekeys secrets/*.env` and commit the result. To drop a machine, remove its key, run `updatekeys`,
+and rotate the secrets: the old machine can still decrypt anything from git history.
+
 ## Multiple GitHub accounts
 
 This setup uses a personal GitHub account by default and a separate work account (here, a GitHub Enterprise
