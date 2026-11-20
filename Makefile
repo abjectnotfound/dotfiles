@@ -127,12 +127,12 @@ herdr-integrations: brew-packages link
 
 # Import the shared SOPS age key (kept in the password manager) into the login keychain, once per machine
 # (macOS only), and check its public key against .sops.yaml. Rerunning only does the check.
-SOPS_KEYCHAIN_SERVICE := sops-age
+SOPS_KEYCHAIN_SERVICE := dotfiles-sops-age
 sops-key:
 	@if ! security find-generic-password -a "$$USER" -s $(SOPS_KEYCHAIN_SERVICE) >/dev/null 2>&1; then \
 		read -rsp "Paste the SOPS age key from the password manager (AGE-SECRET-KEY-1...): " key; echo; \
 		case "$$key" in AGE-SECRET-KEY-1*) ;; *) echo "Not an age secret key" >&2; exit 1 ;; esac; \
-		security add-generic-password -a "$$USER" -s $(SOPS_KEYCHAIN_SERVICE) -l "SOPS age key" -w "$$key"; \
+		security add-generic-password -a "$$USER" -s $(SOPS_KEYCHAIN_SERVICE) -l "Dotfiles SOPS age key" -w "$$key"; \
 	fi
 	@pub=$$(security find-generic-password -a "$$USER" -s $(SOPS_KEYCHAIN_SERVICE) -w | age-keygen -y) && \
 		if grep -qF "$$pub" "$(DOTFILES_DIR)/.sops.yaml"; then echo "SOPS age key OK: $$pub"; \
@@ -142,7 +142,7 @@ sops-key:
 # are SOPS-encrypted and only exist decrypted in geoipupdate's environment.
 geoip:
 	mkdir -p "$(HOMEBREW_PREFIX)/var/GeoIP"
-	SOPS_AGE_KEY_CMD="$${SOPS_AGE_KEY_CMD:-security find-generic-password -a $$USER -s sops-age -w}" \
+	SOPS_AGE_KEY_CMD="$${SOPS_AGE_KEY_CMD:-security find-generic-password -a $$USER -s $(SOPS_KEYCHAIN_SERVICE) -w}" \
 		sops exec-env "$(DOTFILES_DIR)/secrets/geoip.env" 'geoipupdate -v -f "$(DOTFILES_DIR)/config/geoip/GeoIP.conf"'
 
 duti:

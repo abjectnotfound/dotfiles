@@ -195,7 +195,7 @@ and checked against `.sops.yaml`.
 
 **If a machine or the key is compromised:** generate a new key with `age-keygen`, save it in the password manager,
 replace the public key in `.sops.yaml`, run `sops updatekeys secrets/*.env`, and re-import it on each machine
-(delete the old one with `security delete-generic-password -s sops-age`, then `make sops-key`). Also rotate the
+(delete the old one with `security delete-generic-password -s dotfiles-sops-age`, then `make sops-key`). Also rotate the
 secrets themselves, since the old key can still decrypt them from git history.
 
 ## Multiple GitHub accounts
