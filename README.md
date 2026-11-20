@@ -164,9 +164,10 @@ touch $DOTFILES_DIR/local/.env
 export HOMEBREW_BUNDLE_CASK_SKIP="docker-desktop dropbox"
 ```
 
-8. Download the GeoLite2 database for Trippy's GeoIP columns and map (prompts for the SSH key passphrase):
+8. Create this machine's [SOPS key](#secrets), then download the GeoLite2 database for Trippy's GeoIP columns and map:
 
 ```sh
+make sops-key   # once per machine; add the printed key to .sops.yaml (see Secrets)
 make geoip
 ```
 
@@ -174,9 +175,11 @@ make geoip
 
 ## Secrets
 
-The repo is public, so credentials are committed encrypted with [SOPS](https://getsops.io). Each machine's
-`~/.ssh/id_ed25519_abjectnotfound` public key is a recipient in [.sops.yaml](./.sops.yaml), so any of those machines
-can decrypt and nobody else can. Only the values are encrypted; the variable names stay readable in diffs.
+The repo is public, so credentials are committed encrypted with [SOPS](https://getsops.io). Each machine has its
+own [age](https://age-encryption.org) key, used only for these secrets and stored in its login keychain, and its public
+key is a recipient in [.sops.yaml](./.sops.yaml). Any of those machines can decrypt without a prompt once logged in
+(`SOPS_AGE_KEY_CMD` in [system/macos/.env](./system/macos/.env) reads the key with `security`), and nobody else can.
+Only the values are encrypted; the variable names stay readable in diffs.
 
 | File | Holds | Used by |
 | --- | --- | --- |
@@ -187,9 +190,9 @@ sops edit secrets/geoip.env                                   # view or change a
 sops exec-env secrets/geoip.env 'some-command'                # run a command with the secrets in its environment
 ```
 
-**Adding a machine:** append the new machine's `~/.ssh/id_ed25519_abjectnotfound.pub` (the first two fields)
-to `.sops.yaml`, commit and push it, then on a machine that can already decrypt run
-`sops updatekeys secrets/*.env` and commit the result. To drop a machine, remove its key, run `updatekeys`,
+**Adding a machine:** run `make sops-key` on it, which creates the key in the keychain and prints the public key.
+Add that key to `.sops.yaml` with the hostname as a comment, then on a machine that can already decrypt run
+`sops updatekeys secrets/*.env`, commit and push. To drop a machine, remove its key, run `updatekeys`,
 and rotate the secrets: the old machine can still decrypt anything from git history.
 
 ## Multiple GitHub accounts

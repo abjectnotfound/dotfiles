@@ -125,11 +125,19 @@ herdr-integrations: brew-packages link
 		rm -rf "$$tmp"
 	herdr integration install opencode
 
+# Create this machine's SOPS age key in the login keychain (once per machine; macOS only) and print its
+# public key, which goes in .sops.yaml. Rerunning only prints the public key.
+sops-key:
+	@security find-generic-password -a "$$USER" -s sops-age >/dev/null 2>&1 || \
+		security add-generic-password -a "$$USER" -s sops-age -l "SOPS age key" \
+			-w "$$(age-keygen 2>/dev/null | grep '^AGE-SECRET-KEY-')"
+	@security find-generic-password -a "$$USER" -s sops-age -w | age-keygen -y
+
 # Download or refresh the GeoLite2 database used by trippy. The MaxMind credentials in secrets/geoip.env
-# are SOPS-encrypted and only exist decrypted in geoipupdate's environment; sops prompts for the key passphrase.
+# are SOPS-encrypted and only exist decrypted in geoipupdate's environment.
 geoip:
 	mkdir -p "$(HOMEBREW_PREFIX)/var/GeoIP"
-	SOPS_AGE_SSH_PRIVATE_KEY_FILE="$${SOPS_AGE_SSH_PRIVATE_KEY_FILE:-$(HOME)/.ssh/id_ed25519_abjectnotfound}" \
+	SOPS_AGE_KEY_CMD="$${SOPS_AGE_KEY_CMD:-security find-generic-password -a $$USER -s sops-age -w}" \
 		sops exec-env "$(DOTFILES_DIR)/secrets/geoip.env" 'geoipupdate -v -f "$(DOTFILES_DIR)/config/geoip/GeoIP.conf"'
 
 duti:
