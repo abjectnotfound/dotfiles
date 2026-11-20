@@ -30,7 +30,7 @@ for DOTFILE in "$DOTFILES_DIR"/system/.{function,function_*,n,path,env,alias,fzf
   . "$DOTFILE"
 done
 
-if is-macos; then
+if [[ $OSTYPE == darwin* ]]; then
   for DOTFILE in "$DOTFILES_DIR"/system/macos/.{env,alias,function}; do
     . "$DOTFILE"
   done

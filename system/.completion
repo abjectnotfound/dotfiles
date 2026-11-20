@@ -1,7 +1,7 @@
 # Bash completions only (zsh uses compinit from .zshrc)
 [ -z "$BASH_VERSION" ] && return
 
-if [ -z "$HOMEBREW_PREFIX" ] && is-executable brew; then
+if [ -z "$HOMEBREW_PREFIX" ] && command -v brew >/dev/null; then
   HOMEBREW_PREFIX=$(brew --prefix)
 fi
 
@@ -24,13 +24,13 @@ complete -o default -F _dotfiles_completions dot
 
 # npm (https://docs.npmjs.com/cli/completion)
 
-if is-executable npm; then
+if command -v npm >/dev/null; then
   . <(npm completion)
 fi
 
 # Git
 
-if is-executable git; then
+if command -v git >/dev/null; then
   if [ -f "/usr/share/git/completion/git-completion.bash" ]; then
     . "/usr/share/git/completion/git-completion.bash"
   elif [ -n "$HOMEBREW_PREFIX" ] && [ -f "$HOMEBREW_PREFIX/etc/bash_completion.d/git-completion.bash" ]; then

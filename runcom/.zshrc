@@ -44,7 +44,7 @@ for DOTFILE in "$DOTFILES_DIR"/system/.{function,function_*,n,path,env,alias,fzf
   . "$DOTFILE"
 done
 
-if is-macos; then
+if [[ $OSTYPE == darwin* ]]; then
   for DOTFILE in "$DOTFILES_DIR"/system/macos/.{env,alias,function}; do
     . "$DOTFILE"
   done
@@ -106,7 +106,6 @@ command -v starship >/dev/null && eval "$(starship init zsh)"
 command -v atuin >/dev/null && eval "$(atuin init zsh)"
 command -v zoxide >/dev/null && eval "$(zoxide init zsh)"
 command -v mise >/dev/null && eval "$(mise activate zsh)"
-command -v thefuck >/dev/null && eval $(thefuck --alias)
 command -v bun >/dev/null && eval "$(SHELL=zsh bun completions)"
 
 # Route package managers through Socket Firewall; must come after mise activate (see sfw-shims/)

@@ -11,15 +11,6 @@ alias rsync="rsync -vh"
 alias json="json -c"
 alias psgrep="psgrep -i"
 
-# Global aliases
-
-if $(is-supported "alias -g"); then
-  alias -g G="| grep -i"
-  alias -g H="| head"
-  alias -g T="| tail"
-  alias -g L="| less"
-fi
-
 # List declared aliases, functions, paths
 
 alias aliases="alias | sed 's/=.*//'"
@@ -28,9 +19,17 @@ alias paths='echo -e ${PATH//:/\\n}'
 
 # Directory listing/traversal
 
-LS_COLORIZED=$(is-supported "ls --color" --color -G)
-LS_TIMESTYLEISO=$(is-supported "ls --time-style=long-iso" --time-style=long-iso)
-LS_GROUPDIRSFIRST=$(is-supported "ls --group-directories-first" --group-directories-first)
+# GNU ls supports all three flags; BSD ls only has -G for color
+
+if command ls --version >/dev/null 2>&1; then
+  LS_COLORIZED=--color
+  LS_TIMESTYLEISO=--time-style=long-iso
+  LS_GROUPDIRSFIRST=--group-directories-first
+else
+  LS_COLORIZED=-G
+  LS_TIMESTYLEISO=
+  LS_GROUPDIRSFIRST=
+fi
 
 alias l="ls -lahA $LS_COLORIZED $LS_TIMESTYLEISO $LS_GROUPDIRSFIRST"
 alias ll="ls -lA $LS_COLORIZED"
@@ -42,7 +41,7 @@ unset LS_COLORIZED LS_TIMESTYLEISO LS_GROUPDIRSFIRST
 
 # eza (modern ls)
 
-if is-executable eza; then
+if command -v eza >/dev/null; then
   alias l='eza -lh --icons=auto'
   alias ls='eza -1 --icons=auto'
   alias ll='eza -lha --icons=auto --sort=name --group-directories-first'

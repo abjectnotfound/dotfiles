@@ -1,6 +1,14 @@
 DOTFILES_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
-OS := $(shell bin/is-supported bin/is-macos macos $(shell bin/is-supported bin/is-ubuntu ubuntu $(shell bin/is-supported bin/is-arch arch linux)))
-HOMEBREW_PREFIX := $(shell bin/is-supported bin/is-arm64 /opt/homebrew /usr/local)
+ifeq ($(shell uname -s),Darwin)
+OS := macos
+else ifeq ($(shell . /etc/os-release 2>/dev/null && echo $$ID),ubuntu)
+OS := ubuntu
+else ifneq ($(wildcard /etc/arch-release),)
+OS := arch
+else
+OS := linux
+endif
+HOMEBREW_PREFIX := $(if $(filter arm64,$(shell uname -m)),/opt/homebrew,/usr/local)
 PATH := $(HOMEBREW_PREFIX)/bin:$(DOTFILES_DIR)/bin:$(PATH)
 SHELL := env PATH=$(PATH) /bin/bash
 SHELLS := /private/etc/shells
@@ -27,16 +35,16 @@ core-ubuntu:
 	apt-get dist-upgrade -f
 
 stow-ubuntu: core-ubuntu
-	is-executable stow || apt-get -y install stow
+	command -v stow >/dev/null || apt-get -y install stow
 
 core-arch:
 	pacman -Syu --noconfirm
 
 stow-arch: core-arch
-	is-executable stow || pacman -S --noconfirm stow
+	command -v stow >/dev/null || pacman -S --noconfirm stow
 
 stow-macos: brew
-	is-executable stow || brew install stow
+	command -v stow >/dev/null || brew install stow
 
 sudo:
 ifndef GITHUB_ACTION
@@ -77,7 +85,7 @@ unlink: stow-$(OS)
 		mv -v $(HOME)/$$FILE.bak $(HOME)/$${FILE%%.bak}; fi; done
 
 brew:
-	is-executable brew || curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | bash
+	command -v brew >/dev/null || curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | bash
 
 bash: brew
 	if ! grep -qx $(BIN)/bash $(SHELLS); then \
