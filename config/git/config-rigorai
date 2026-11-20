@@ -1,5 +1,5 @@
 [user]
-	email = 339225081+alex-ciavarra_innoai@users.noreply.github.com
+	email = alex.ciavarra@rigor.ai
 	signingkey = ~/.ssh/id_ed25519_rigorai_signing.pub
 [github]
 	user = alex-ciavarra_innoai
